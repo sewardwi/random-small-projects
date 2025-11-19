@@ -1,0 +1,92 @@
+import pygame
+import random
+
+pygame.init()
+
+# Set game screen dimensions
+screen_width = 800
+screen_height = 700
+
+# Define game colors
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+GRAY = (128, 128, 128)
+RED = (255, 0, 0)
+BLUE = (0, 0, 255)
+GREEN = (0, 255, 0)
+YELLOW = (255, 255, 0)
+PURPLE = (255, 0, 255)
+
+# Define block dimensions
+block_size = 25
+grid_width = screen_width // block_size
+grid_height = screen_height // block_size
+
+# Define game fonts
+score_font = pygame.font.SysFont("arial", 30, True)
+gameover_font = pygame.font.SysFont("arial", 60, True)
+
+# Define game variables
+grid = [[0 for x in range(grid_width)] for y in range(grid_height)]
+active_block = []
+score = 0
+game_over = False
+
+# Define block shapes
+shapes = [
+    [[1, 1, 1],
+     [0, 1, 0]],
+    [[2, 2, 0],
+     [0, 2, 2]],
+    [[0, 3, 3],
+     [3, 3, 0]],
+    [[4, 4],
+     [4, 4]],
+    [[5, 5, 5, 5]],
+    [[6, 6, 6],
+     [0, 6, 0]],
+    [[0, 7, 0],
+     [7, 7, 7]],
+]
+
+# Define block colors
+colors = [
+    BLACK,
+    RED,
+    BLUE,
+    GREEN,
+    YELLOW,
+    PURPLE,
+    GRAY,
+]
+
+# Define function to create a new block
+def new_block():
+    global active_block
+    block_shape = random.choice(shapes)
+    block_color = random.choice(colors)
+    active_block = [block_shape, block_color, 0, 3]
+
+# Define function to draw the game screen
+def draw_screen():
+    screen.fill(WHITE)
+    for y in range(grid_height):
+        for x in range(grid_width):
+            pygame.draw.rect(screen, BLACK, [x * block_size, y * block_size, block_size, block_size], 1)
+            if grid[y][x] != 0:
+                pygame.draw.rect(screen, colors[grid[y][x]], [x * block_size + 1, y * block_size + 1, block_size - 2, block_size - 2])
+    if active_block != []:
+        for y in range(len(active_block[0])):
+            for x in range(len(active_block[0][0])):
+                if active_block[0][y][x] != 0:
+                    pygame.draw.rect(screen, active_block[1], [(active_block[3] + x) * block_size + 1, (active_block[2] + y) * block_size + 1, block_size - 2, block_size - 2])
+
+    score_text = score_font.render("Score: " + str(score), True, BLACK)
+    screen.blit(score_text, [10, 10])
+
+# Define function to check if block can be moved
+def can_move(row, col, block):
+    for y in range(len(block)):
+        for x in range(len(block[0])):
+            if block[y][x] != 0:
+                if y + row <
